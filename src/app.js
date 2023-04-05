@@ -32,7 +32,7 @@ app.post("/tweets", (req, res)=>{
 app.get("/tweets", (req, res)=>{
 
     function retornar(){
-        if(tweets.length>=1){
+        if(tweets.length>10){
             const ultDez = tweets.slice(-10)
             for(let i=0; i<ultDez.length; i++){
                 const nome = ultDez[i].username
@@ -43,7 +43,18 @@ app.get("/tweets", (req, res)=>{
                 }
             }
             return ultDez
-        } else {
+        } else if(tweets.length>0){
+            for(let i=0; i<tweets.length; i++){
+                const nome = tweets[i].username
+                if(signs.includes(nome)){
+                    const indice = signs.indexOf(nome)
+                    const avatar = signs[indice].avatar
+                    tweets[i].avatar = avatar
+                }
+            }
+            return tweets
+        }
+         else {
             return tweets
         }
     }
