@@ -15,7 +15,7 @@ app.post("/sign-up", (req, res)=>{
     const {username, avatar} = req.body
 
     if(typeof username !== 'string' || typeof avatar !== 'string' || !avatar || !username){
-        return res.status(400).send("Todos os campos são obrigatórios!")
+        return res.status(201).send("Todos os campos são obrigatórios!")
     }
 
     const user = { username, avatar }
@@ -75,6 +75,15 @@ app.get("/tweets", (req, res)=>{
     }
 
     res.send(retornar())
+})
+
+app.get("/tweets/:username", (req, res)=>{
+
+    const {username} = req.params
+    
+    const lista = tweets.filter((use)=>use.username===username)
+
+    res.send(lista)
 })
 
 
