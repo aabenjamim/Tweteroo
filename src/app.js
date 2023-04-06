@@ -10,17 +10,18 @@ const signs = []
 const tweets = []
 
 app.post("/sign-up", (req, res)=>{
-    const sign = req.body
-    signs.push(sign)
+    const {username, avatar} = req.body
+    const user = { username, avatar }
+    signs.push(user)
     res.send('OK')
 })
 
 app.post("/tweets", (req, res)=>{
-    const tweet = req.body
+    const {username, tweet} = req.body
     function adicionar(){
-        const username = tweet.username
-        if(signs.includes(username)){
-            tweets.push(tweet)
+        const sign = signs.find(sign => sign.username === username)
+        if(sign){
+            tweets.push({username, tweet})
             return 'OK'
         } else{
             return 'UNAUTHORIZED'
@@ -34,24 +35,27 @@ app.get("/tweets", (req, res)=>{
     function retornar(){
         if(tweets.length>10){
             const ultDez = tweets.slice(-10)
+
             for(let i=0; i<ultDez.length; i++){
                 const nome = ultDez[i].username
-                if(signs.includes(nome)){
-                    const indice = signs.indexOf(nome)
-                    const avatar = signs[indice].avatar
-                    ultDez[i].avatar = avatar
-                }
+
+                const user = tweets.find(use => use.username === nome)
+                
+                ultDez[i].avatar = user.avatar
             }
+
             return ultDez
-        } else if(tweets.length>0){
+        } 
+        else if(tweets.length>0 && tweets.length<=10){
+
             for(let i=0; i<tweets.length; i++){
                 const nome = tweets[i].username
-                if(signs.includes(nome)){
-                    const indice = signs.indexOf(nome)
-                    const avatar = signs[indice].avatar
-                    tweets[i].avatar = avatar
-                }
+
+                const user = tweets.find(use => use.username === nome)
+
+                tweets[i].avatar = user.avatar
             }
+
             return tweets
         }
          else {
